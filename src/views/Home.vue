@@ -1,18 +1,135 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container">
+      <div class="filter">
+        <span class="filter__caption caption">篩選條件</span>
+        <button class="btn filter__pokemon">寶可夢</button>
+        <button class="btn filter__travel">旅行</button>
+      </div>
+
+      <div class="container__newest caption">最新</div>
+
+      <div class="groups">
+        <group-item
+          v-for="(groupItem, index) in groupItems"
+          :key=groupItem.name
+          :info="groupItem"
+          :theme="themes[index]"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import GroupItem from '@/components/GroupItem.vue'
+import GroupItemStructure from '@/components/data-structure/GroupItem.js'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    GroupItem,
+    GroupItemStructure
+  },
+
+  data () {
+    return {
+      themes: ['eucalyptusGreen', 'orchidPurple', 'japaneseIndigoBlue'],
+      groupItems: [ // To Sam - should get from store
+        new GroupItemStructure(
+          '寶可夢情報大全',
+          ['2018-07', '2018-08'],
+          {
+            '寶可夢': 7,
+            '旅行': 3
+          }
+        ),
+        new GroupItemStructure(
+          '旅遊歐洲中部',
+          ['2018-06', '2018-07'],
+          {
+            '旅行': 4
+          }
+        ),
+        new GroupItemStructure(
+          '東亞Vlog',
+          ['2018-04', '2018-05'],
+          {
+            '寶可夢': 2,
+            '旅行': 11
+          }
+        )
+      ]
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "../assets/stylesheets/styleguild";
+
+.container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 0.62rem 0.5rem auto;
+  width: 100%;
+
+  margin: 0 auto;
+
+  @media (min-width: $sm) {
+    width: 5.55rem;
+  }
+}
+
+.filter {
+  display: grid;
+  grid-gap: 0.24rem;
+  grid-template-columns: repeat(auto-fill, minmax(0.96rem, 1fr));
+  align-items: center;
+
+  background: white;
+
+  padding: 0 27px 0 32px;
+
+  border: 0.014rem solid $japaneseIndigoBlue--l4;
+  border-radius: 0.04rem;
+
+  &__caption {
+    color: $gunmetalBlack--l3;
+  }
+
+  &__pokemon {
+    grid-column-end: -2;
+  }
+
+  &__travel {
+    grid-column-end: -1;
+  }
+
+  &__pokemon,
+  &__travel {
+    color: $pokemonRed--l3;
+    border-color: $pokemonRed--l3;
+
+    &:hover {
+      background: $pokemonRed--l1;
+      color: white;
+      border-color: $pokemonRed--l1;
+    }
+  }
+}
+
+.container__newest {
+  display: grid;
+  align-items: center;
+
+  color: $gunmetalBlack--l4;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: 5.46rem;
+  grid-gap: 0.56rem;
+}
+</style>

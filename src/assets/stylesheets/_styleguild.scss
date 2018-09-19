@@ -1,0 +1,101 @@
+// Breakpoint
+$sm: 5.76em;
+$md: 7.68em;
+$lg: 9.92em;
+$xl: 12em;
+
+/*$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;*/
+
+// Typographic -------------------
+.display {
+  font-size: 0.64rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+h1, .title {
+  font-size: 0.42rem;
+}
+
+h2, .sub-header {
+  font-size: 0.28rem;
+}
+
+h3, .sub-sub-header {
+  font-size: 0.22rem;
+}
+
+.body-copy {
+  font-size: 0.2rem;
+}
+
+.highlighted {
+  font-size: 0.2rem;
+  // background: ;
+}
+
+.caption, .small-text {
+  font-size: 0.13rem;
+}
+
+// color pallete ------------------
+// d1 means darker 1 degree
+// l1 means lighter 1 degree
+$pokemonRed--d1: #d13a62;
+$pokemonRed: #d6416a;
+$pokemonRed--l1: #db597d;
+$pokemonRed--l2: #e78da6;
+$pokemonRed--l3: #eeb3c3;
+
+$gunmetalBlack: #1b2130;
+$gunmetalBlack--l1: #2f3542;
+$gunmetalBlack--12: #4e535e;
+$gunmetalBlack--l3: #6d717b;
+$gunmetalBlack--l4: #acaeb3;
+$gunmetalBlack--l5: #eaeaec;
+$gunmetalBlack--l6: #fbfbfb;
+
+$japaneseIndigoBlue--d1: #262e46;
+$japaneseIndigoBlue: #2B344B;
+$japaneseIndigoBlue--l1: #51586c;
+$japaneseIndigoBlue--l2: #7f8492;
+$japaneseIndigoBlue--l3: #b2b5bd;
+$japaneseIndigoBlue--l4: #e6e7e9;
+$japaneseIndigoBlue--l5: #fcfcfc;
+
+$orchidPurple--d1: #5c75e5;
+$orchidPurple: #6882e7;
+$orchidPurple--l1: #869beb;
+$orchidPurple--l2: #a4b4f0;
+$orchidPurple--l3: #c2cdf5;
+
+$spanishPink--d1: #f9b7b4;
+$spanishPink: #fabeb9;
+$spanishPink--l1: #f7c7c4;
+$spanishPink--l2: #fbd0cc;
+$spanishPink--l3: #fde7e5;
+
+$eucalyptusGreen--d1: #4bceb1;
+$eucalyptusGreen: #54d3b6;
+$eucalyptusGreen--l1: #72d7c1;
+$eucalyptusGreen--l2: #89dbc9;
+$eucalyptusGreen--ll3: #cceae4;
+
+// button(-like) style
+.btn {
+  height: 0.24rem;
+  
+  background: transparent;
+
+  font-size: 0.13rem;
+
+  border: 0.014rem solid;
+  border-radius: 0.12rem;
+  
+  transition: .2s;
+}
