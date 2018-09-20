@@ -1,13 +1,13 @@
 // Breakpoint
-$sm: 5.76em;
-$md: 7.68em;
-$lg: 9.92em;
-$xl: 12em;
+// $sm: 5.76rem;
+// $md: 7.68rem;
+// $lg: 9.92rem;
+// $xl: 12rem;
 
-/*$sm: 576px;
+$sm: 576px;
 $md: 768px;
 $lg: 992px;
-$xl: 1200px;*/
+$xl: 1200px;
 
 // Typographic -------------------
 .display {
@@ -84,7 +84,7 @@ $eucalyptusGreen--d1: #4bceb1;
 $eucalyptusGreen: #54d3b6;
 $eucalyptusGreen--l1: #72d7c1;
 $eucalyptusGreen--l2: #89dbc9;
-$eucalyptusGreen--ll3: #cceae4;
+$eucalyptusGreen--l3: #cceae4;
 
 // button(-like) style
 .btn {
@@ -96,6 +96,7 @@ $eucalyptusGreen--ll3: #cceae4;
 
   border: 0.014rem solid;
   border-radius: 0.12rem;
-  
+  outline: none;
+
   transition: .2s;
 }

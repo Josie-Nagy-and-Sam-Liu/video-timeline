@@ -3,18 +3,18 @@
     <div class="container">
       <div class="filter">
         <span class="filter__caption caption">篩選條件</span>
-        <button class="btn filter__pokemon">寶可夢</button>
-        <button class="btn filter__travel">旅行</button>
+        <button class="filter__pokemon btn">寶可夢</button>
+        <button class="filter__travel btn">旅行</button>
       </div>
 
-      <div class="container__newest caption">最新</div>
+      <div class="container__captionNewest caption">最新</div>
 
       <div class="groups">
         <group-item
           v-for="(groupItem, index) in groupItems"
           :key=groupItem.name
           :info="groupItem"
-          :theme="themes[index]"
+          :theme="themes[index % 4]"
         />
       </div>
     </div>
@@ -35,7 +35,7 @@ export default {
 
   data () {
     return {
-      themes: ['eucalyptusGreen', 'orchidPurple', 'japaneseIndigoBlue'],
+      themes: ['eucalyptusGreen', 'orchidPurple', 'japaneseIndigoBlue', 'spanishPink'],
       groupItems: [ // To Sam - should get from store
         new GroupItemStructure(
           '寶可夢情報大全',
@@ -59,6 +59,14 @@ export default {
             '寶可夢': 2,
             '旅行': 11
           }
+        ),
+        new GroupItemStructure(
+          '美國Vlog',
+          ['2017-12', '2018-01'],
+          {
+            '寶可夢': 2,
+            '旅行': 11
+          }
         )
       ]
     }
@@ -67,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/stylesheets/styleguild";
+@import "../assets/stylesheets/styleguide";
 
 .container {
   display: grid;
@@ -84,16 +92,21 @@ export default {
 
 .filter {
   display: grid;
-  grid-gap: 0.24rem;
-  grid-template-columns: repeat(auto-fill, minmax(0.96rem, 1fr));
+  grid-gap: 0.16rem;
+  grid-template-columns: repeat(auto-fill, minmax(0.72rem, 1fr));
   align-items: center;
 
   background: white;
 
-  padding: 0 27px 0 32px;
+  padding: 0 0.27rem 0 0.32rem;
 
   border: 0.014rem solid $japaneseIndigoBlue--l4;
   border-radius: 0.04rem;
+
+  @media (min-width: $sm) {
+    grid-gap: 0.24rem;
+    grid-template-columns: repeat(auto-fill, minmax(0.96rem, 1fr));
+  }
 
   &__caption {
     color: $gunmetalBlack--l3;
@@ -120,7 +133,7 @@ export default {
   }
 }
 
-.container__newest {
+.container__captionNewest {
   display: grid;
   align-items: center;
 
@@ -129,7 +142,11 @@ export default {
 
 .groups {
   display: grid;
-  grid-template-columns: 5.46rem;
+  grid-template-columns: 100%;
   grid-gap: 0.56rem;
+
+  @media (min-width: $sm) {
+    grid-template-columns: 5.46rem;
+  }
 }
 </style>

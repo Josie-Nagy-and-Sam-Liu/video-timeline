@@ -48,7 +48,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@import "../assets/stylesheets/styleguild";
+@import "../assets/stylesheets/styleguide";
 
 .groupItem {
   display: grid;
@@ -58,7 +58,7 @@ export default {
   overflow: hidden;
   cursor: pointer;
 
-  padding: 0.18rem 0.3rem 0 0.3rem;
+  padding: 0.16rem 0.24rem 0 0.24rem;
 
   border: 0.02rem solid;
   border-radius: 0.11rem;
@@ -67,6 +67,10 @@ export default {
     .footer__toast {
       transform: translateY(26.4%);
     }
+  }
+
+  @media (min-width: $sm) {
+    padding: 0.18rem 0.3rem 0 0.3rem;
   }
 }
 
@@ -115,34 +119,60 @@ export default {
   }
 }
 
-/* themes */
+/* themes - for the colors of each group */
 .eucalyptusGreen {
   color: $eucalyptusGreen--d1;
   border-color: $eucalyptusGreen--d1;
-  box-shadow: 8px 8px $eucalyptusGreen;
+  box-shadow: 0 4px $eucalyptusGreen--l2;
 
   .footer__toast {
     background: $eucalyptusGreen--d1;
   }
+
+  @media (min-width: $sm) {
+    box-shadow: 8px 8px $eucalyptusGreen;
+  }
 }
 
 .orchidPurple {
-  color: #4a90e2; /* To Josie - can't find this color in the style guild */
-  border-color: #3f59e699; /* To Josie - can't find this color in the style guild */
-  box-shadow: 8px 8px $orchidPurple;
+  color: #4a90e2; /* To Josie - can't find this color in the style guide */
+  border-color: #3f59e699; /* To Josie - can't find this color in the style guide */
+  box-shadow: 0 4px #9fade5; /* To Josie - can't find this color in the style guide */
 
   .footer__toast {
     background: $orchidPurple;
+  }
+
+  @media (min-width: $sm) {
+    box-shadow: 8px 8px $orchidPurple;
   }
 }
 
 .japaneseIndigoBlue {
   color: $japaneseIndigoBlue;
-  border-color: #0d3b66bf; /* To Josie - can't find this color in the style guild */
-  box-shadow: 8px 8px #0d3b66;
+  border-color: #0d3b66bf; /* To Josie - can't find this color in the style guide */
+  box-shadow: 0 4px #0d3b66; /* To Josie - can't find this color in the style guide */
 
   .footer__toast {
     background: #0d3b66;
+  }
+
+  @media (min-width: $sm) {
+    box-shadow: 8px 8px #0d3b66; /* To Josie - can't find this color in the style guide */
+  }
+}
+
+.spanishPink {
+  color: $spanishPink;
+  border-color: $spanishPink;
+  box-shadow: 0 4px #faccc8; /* To Josie - can't find this color in the style guide */
+
+  .footer__toast {
+    background: $spanishPink;
+  }
+
+  @media (min-width: $sm) {
+    box-shadow: 8px 8px $spanishPink;
   }
 }
 </style>

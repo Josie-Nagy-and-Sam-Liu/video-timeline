@@ -7,7 +7,7 @@
 </template>
 
 <style lang="scss">
-@import "assets/stylesheets/styleguild";
+@import "assets/stylesheets/styleguide";
 
 html {
   font-size: 625%; /* 1px = 0.01rem */
