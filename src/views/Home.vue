@@ -1,28 +1,30 @@
 <template>
-  <div class="home">
-    <div class="container">
-      <div class="filter">
-        <span class="filter__caption caption">篩選條件</span>
-        <button class="filter__pokemon btn">寶可夢</button>
-        <button class="filter__travel btn">旅行</button>
-      </div>
+<div class="home">
+  <div class="container">
+    <div class="filter">
+      <span class="filter__caption caption">篩選條件</span>
+      <button class="filter__pokemon btn">寶可夢</button>
+      <button class="filter__travel btn">旅行</button>
+    </div>
 
-      <div class="container__captionNewest caption">最新</div>
+    <div class="container__captionNewest caption">最新</div>
 
-      <div class="groups">
-        <group-item
-          v-for="(groupItem, index) in groupItems"
-          :key=groupItem.name
-          :info="groupItem"
-          :theme="themes[index % 4]"
-        />
-      </div>
+    <div class="groups">
+      <group-item
+        v-for="(groupItem, key, index) in groupItems"
+        :key=groupItem.name
+        :info="groupItem"
+        :theme="themes[index % 4]"
+        @click.native="$router.push({ name: 'timeline', params: {groupId: key} })"
+      />
     </div>
   </div>
+</div>
 </template>
 
 <script>
 // @ is an alias to /src
+import firebase from 'firebase/app'
 import GroupItem from '@/components/GroupItem.vue'
 import GroupItemStructure from '@/components/data-structure/GroupItem.js'
 
@@ -36,40 +38,14 @@ export default {
   data () {
     return {
       themes: ['eucalyptusGreen', 'orchidPurple', 'japaneseIndigoBlue', 'spanishPink'],
-      groupItems: [ // To Sam - should get from store
-        new GroupItemStructure(
-          '寶可夢情報大全',
-          ['2018-07', '2018-08'],
-          {
-            '寶可夢': 7,
-            '旅行': 3
-          }
-        ),
-        new GroupItemStructure(
-          '旅遊歐洲中部',
-          ['2018-06', '2018-07'],
-          {
-            '旅行': 4
-          }
-        ),
-        new GroupItemStructure(
-          '東亞Vlog',
-          ['2018-04', '2018-05'],
-          {
-            '寶可夢': 2,
-            '旅行': 11
-          }
-        ),
-        new GroupItemStructure(
-          '美國Vlog',
-          ['2017-12', '2018-01'],
-          {
-            '寶可夢': 2,
-            '旅行': 11
-          }
-        )
-      ]
+      groupItems: null
     }
+  },
+
+  created () {
+    firebase.database().ref('groups').once('value', snapshot => {
+      this.groupItems = snapshot.val()
+    })
   }
 }
 </script>

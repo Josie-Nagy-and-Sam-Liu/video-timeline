@@ -23,3 +23,6 @@ yarn-error.log*
 
 # Config for development
 vue.config.js
+
+# Firebase config and key
+src/database/config.js

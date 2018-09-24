@@ -1,9 +1,27 @@
 <template>
-  <div class="timeline">
-    <h1>This is the Timeline page</h1>
-  </div>
+<div class="timeline">
+  <p class="small-text">{{timelines}}</p>
+</div>
 </template>
 
-<script></script>
+<script>
+import firebase from 'firebase/app'
+
+export default {
+  name: 'timeline',
+
+  data () {
+    return {
+      timelines: null
+    }
+  },
+
+  created () {
+    firebase.database().ref('timeline').orderByChild('groupId').equalTo(this.$route.params.groupId).once('value', snapshot => {
+      this.timelines = snapshot.val()
+    })
+  }
+}
+</script>
 
 <style lang="scss" scoped></style>

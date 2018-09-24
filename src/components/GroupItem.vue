@@ -27,14 +27,14 @@ export default {
     GroupItemStructure
   },
   props: {
-    info: GroupItemStructure,
+    info: Object,
     theme: String
   },
 
   computed: {
     getPeriod () {
-      let startTime = this.info.period[0].split('-') // 0: year, 1: month
-      let endTime = this.info.period[1].split('-') // 0: year, 1: month
+      let startTime = this.info.period.startTime.split('-') // 0: year, 1: month
+      let endTime = this.info.period.endTime.split('-') // 0: year, 1: month
 
       if (startTime[0] === endTime[0]) {
         return startTime[1] + '月 - ' + endTime[1] + '月 ' + endTime[0]
