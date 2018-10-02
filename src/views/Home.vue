@@ -15,7 +15,7 @@
         :key=groupItem.name
         :info="groupItem"
         :theme="themes[index % 4]"
-        @click.native="$router.push({ name: 'timeline', params: {groupId: key} })"
+        @click.native="$router.push({ name: 'timeline', params: {timelineId: key} })"
       />
     </div>
   </div>
@@ -43,7 +43,7 @@ export default {
   },
 
   created () {
-    firebase.database().ref('groups').once('value', snapshot => {
+    firebase.database().ref('timelines').once('value', snapshot => {
       this.groupItems = snapshot.val()
     })
   }
