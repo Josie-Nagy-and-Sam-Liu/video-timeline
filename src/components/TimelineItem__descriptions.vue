@@ -1,7 +1,7 @@
 <template>
 <div class="descriptions">
 
-  <div class="toggler" @click="isShowing = !isShowing">顯示訊息</div>
+  <div class="toggler" @click="isHidden = !isHidden">顯示訊息</div>
 
   <div :class="['contain', {hidden: isHidden}]">
     <div class="contain__owner">

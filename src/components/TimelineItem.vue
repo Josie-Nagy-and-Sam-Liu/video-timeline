@@ -1,5 +1,5 @@
 <template>
-<div class="timelineItem--active small-text">
+<div :class="['small-text', setTimelineItemClass]">
   <div class="timelineItem__body">
 
     <div id="player" class="player" v-if="active"></div>
@@ -30,25 +30,31 @@ export default {
     baseInfo
   },
 
-  data () {
-    return {
-      active: true
-    }
-  },
-
   props: {
     info: Object,
     vid: String,
-    index: Number
+    index: Number,
+    active: Boolean
+  },
+
+  computed: {
+    setTimelineItemClass () {
+      if (this.active) {
+        return 'timelineItem--active'
+      } else {
+        return 'timelineItem'
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/stylesheets/styleguide";
+@import "../assets/stylesheets/timeline-shared-styles";
 
 .timelineItem {
-  grid-column: contain;
+  grid-column: 2 / 3;
   cursor: pointer;
 
   &__body {
@@ -61,50 +67,56 @@ export default {
 
     border: 0.01rem solid #232a3c38; /* To Josie - can't find this color in styleguide */
 
+    transition: .3s;
+
     @media (min-width: $md) {
       padding: 0.06rem 0.06rem 0.36rem 0.18rem;
 
       border-width: 0.02rem;
       border-radius: 0.04rem;
       box-shadow: 0.06rem 0.06rem $japaneseIndigoBlue--l3;
+
+      &:hover {
+        border-color: $pokemonRed--l2;
+        box-shadow: 0.06rem 0.06rem $pokemonRed--l1;
+      }
     }
   }
+}
 
-  &--active {
-    grid-column: 1 / -1; /* take the whole row */
-    cursor: auto;
+.timelineItem--active {
+  grid-column: 1 / -1; /* take the whole row */
+  cursor: auto;
 
-    background: #232a3c; /* To Josie - can't find this color in styleguide */
-    color: white;
+  background: #232a3c; /* To Josie - can't find this color in styleguide */
+  color: white;
 
-    .timelineItem__body {
-      padding: 0;
+  .timelineItem__body {
+    padding: 0;
 
-      border: none;
-      box-shadow: none;
+    border: none;
+    box-shadow: none;
 
-      @media (min-width: $md) {
-        grid-template-columns: 1fr 7.41rem 1fr;
-        grid-template-rows: auto 4.2rem auto 1fr;
-        grid-template-areas:
-          ". secondaryTitle ."
-          ". player ."
-          ". baseInfo ."
-          ". descriptions .";
-      }
+    @media (min-width: $md) {
+      @include column__large;  /* source: timeline-shared-styles */
+      grid-template-rows: auto 4.2rem auto 1fr;
+      grid-template-areas:
+        ". secondaryTitle ."
+        ". player ."
+        ". baseInfo ."
+        ". descriptions .";
+    }
 
-      @media (min-width: $xl) {
-        grid-column-gap: 0.3rem;
-        grid-row-gap: 0.2rem;
-        grid-template-columns: 1fr 7.41rem 3.6rem 1fr;
-        grid-template-rows: 0.2rem 3.82rem auto;
-        grid-template-areas:
-          ". player secondaryTitle ."
-          ". player descriptions ."
-          ". baseInfo descriptions .";
+    @media (min-width: $xl) {
+      @include column__large--active;  /* source: timeline-shared-styles */
+      grid-row-gap: 0.2rem;
+      grid-template-rows: 0.2rem 3.82rem auto;
+      grid-template-areas:
+        ". player secondaryTitle ."
+        ". player descriptions ."
+        ". baseInfo descriptions .";
 
-        padding-bottom: 0.45rem;
-      }
+      padding-bottom: 0.45rem;
     }
   }
 }
