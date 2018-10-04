@@ -11,9 +11,9 @@
 
     <div class="groups">
       <group-item
-        v-for="(groupItem, key, index) in groupItems"
-        :key=groupItem.name
-        :info="groupItem"
+        v-for="(timeline, key, index) in timelines"
+        :key=timeline.name
+        :info="timeline"
         :theme="themes[index % 4]"
         @click.native="$router.push({ name: 'timeline', params: {timelineId: key} })"
       />
@@ -24,7 +24,7 @@
 
 <script>
 // @ is an alias to /src
-import firebase from 'firebase/app'
+import { mapState, mapActions } from 'vuex'
 import GroupItem from '@/components/GroupItem.vue'
 import GroupItemStructure from '@/components/data-structure/GroupItem.js'
 
@@ -37,15 +37,24 @@ export default {
 
   data () {
     return {
-      themes: ['eucalyptusGreen', 'orchidPurple', 'japaneseIndigoBlue', 'spanishPink'],
-      groupItems: null
+      themes: ['eucalyptusGreen', 'orchidPurple', 'japaneseIndigoBlue', 'spanishPink']
     }
   },
 
-  created () {
-    firebase.database().ref('timelines').once('value', snapshot => {
-      this.groupItems = snapshot.val()
+  computed: {
+    ...mapState({
+      timelines: 'timelines'
     })
+  },
+
+  methods: {
+    ...mapActions({
+      fetchTimelines: 'fetchTimelines'
+    })
+  },
+
+  created () {
+    this.fetchTimelines()
   }
 }
 </script>

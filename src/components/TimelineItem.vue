@@ -6,7 +6,7 @@
 
     <div class="secondaryTitle" v-if="active">
       <router-link to="/" class="secondaryTitle__backToHome">&lt; 回首頁</router-link>
-      <div class="secondaryTitle__timelineName">TTTTEEESSTTT</div>
+      <div class="secondaryTitle__timelineName">{{specifiedTimeline.name}}</div>
     </div>
 
     <descriptions :info="info" v-if="active" />
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import descriptions from '@/components/TimelineItem__descriptions'
 import baseInfo from '@/components/TimelineItem__baseInfo'
 
@@ -38,6 +39,10 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      specifiedTimeline: 'specifiedTimeline'
+    }),
+
     setTimelineItemClass () {
       if (this.active) {
         return 'timelineItem--active'

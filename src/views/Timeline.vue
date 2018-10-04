@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
+import { mapState, mapActions } from 'vuex'
 import TimelineItem from '@/components/TimelineItem'
 
 export default {
@@ -26,18 +26,16 @@ export default {
 
   data () {
     return {
-      videos: null,
       nowFocusOn: null
     }
   },
 
-  created () {
-    firebase.database().ref('videos').orderByChild('timelineId').equalTo(this.$route.params.timelineId).once('value', snapshot => {
-      this.videos = snapshot.val()
-    })
-  },
-
   computed: {
+    ...mapState({
+      videos: 'videos',
+      specifiedTimeline: 'specifiedTimeline'
+    }),
+
     setContainerClass () {
       if (this.nowFocusOn === null) {
         // no video is selected yet
@@ -47,6 +45,20 @@ export default {
         return 'container--active'
       }
     }
+  },
+
+  methods: {
+    ...mapActions({
+      fetchVideos: 'fetchVideos',
+      fetchSpecifiedTimeline: 'fetchSpecifiedTimeline'
+    })
+  },
+
+  created () {
+    // fetch all videos of the timeline with timelineId
+    this.fetchVideos(this.$route.params.timelineId)
+    // fetch the information of the timemline with timelineId
+    this.fetchSpecifiedTimeline(this.$route.params.timelineId)
   }
 }
 </script>
