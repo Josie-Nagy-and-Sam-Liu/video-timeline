@@ -5,7 +5,6 @@
       v-for="(video, key, index) in videos"
       :key="key"
       :vid="key"
-      :info="video"
       :index="index"
       :active="nowFocusOn === index"
       @click.native="nowFocusOn = index"
@@ -32,8 +31,8 @@ export default {
 
   computed: {
     ...mapState({
-      videos: 'videos',
-      specifiedTimeline: 'specifiedTimeline'
+      videos: state => state.videos.all,
+      specifiedTimeline: state => state.timelines.specifiedOne
     }),
 
     setContainerClass () {
@@ -49,8 +48,8 @@ export default {
 
   methods: {
     ...mapActions({
-      fetchVideos: 'fetchVideos',
-      fetchSpecifiedTimeline: 'fetchSpecifiedTimeline'
+      fetchVideos: 'videos/fetchVideos',
+      fetchSpecifiedTimeline: 'timelines/fetchSpecifiedTimeline'
     })
   },
 
@@ -59,6 +58,13 @@ export default {
     this.fetchVideos(this.$route.params.timelineId)
     // fetch the information of the timemline with timelineId
     this.fetchSpecifiedTimeline(this.$route.params.timelineId)
+  },
+
+  destroyed () {
+    // We found that the videos of the last timeline may display in a flash
+    // because the asyc call of fetchVideo hasn't finished the state
+    // To solve that, we clean the all in videos store everytime user leave this page to avoid it
+    this.$store.commit('videos/setVideos', {})
   }
 }
 </script>

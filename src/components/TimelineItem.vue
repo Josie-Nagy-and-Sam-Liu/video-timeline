@@ -9,9 +9,9 @@
       <div class="secondaryTitle__timelineName">{{specifiedTimeline.name}}</div>
     </div>
 
-    <descriptions :info="info" v-if="active" />
+    <descriptions :info="video" v-if="active" />
 
-    <base-info :info="info" :order="index" :active="active" />
+    <base-info :info="video" :order="index" :active="active" />
 
   </div>
 
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import descriptions from '@/components/TimelineItem__descriptions'
 import baseInfo from '@/components/TimelineItem__baseInfo'
 
@@ -31,8 +31,13 @@ export default {
     baseInfo
   },
 
+  data () {
+    return {
+      video: null
+    }
+  },
+
   props: {
-    info: Object,
     vid: String,
     index: Number,
     active: Boolean
@@ -40,7 +45,11 @@ export default {
 
   computed: {
     ...mapState({
-      specifiedTimeline: 'specifiedTimeline'
+      specifiedTimeline: state => state.timelines.specifiedOne
+    }),
+
+    ...mapGetters({
+      getVideo: 'videos/getSpecifiedVideo'
     }),
 
     setTimelineItemClass () {
@@ -50,6 +59,10 @@ export default {
         return 'timelineItem'
       }
     }
+  },
+
+  created () {
+    this.video = this.getVideo(this.vid)
   }
 }
 </script>

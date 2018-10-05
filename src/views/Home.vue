@@ -43,13 +43,13 @@ export default {
 
   computed: {
     ...mapState({
-      timelines: 'timelines'
+      timelines: state => state.timelines.all
     })
   },
 
   methods: {
     ...mapActions({
-      fetchTimelines: 'fetchTimelines'
+      fetchTimelines: 'timelines/fetchTimelines'
     })
   },
 
