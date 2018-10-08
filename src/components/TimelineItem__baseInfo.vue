@@ -1,7 +1,7 @@
 <template>
-<div :class="['baseInfo', {active: active}]">
+<div :class="rootClass">
 
-  <div class="duration small-text" v-if="!active">
+  <div class="duration small-text">
     {{formatDuration(info.duration)}}
   </div>
 
@@ -17,11 +17,11 @@
     {{formatRecordedAt(info.recordedAt)}}
   </div>
 
-  <div class="location small-text" v-if="active">
+  <div class="location small-text" v-if="isActiveOrMain">
     {{info.location}}
   </div>
 
-  <div class="categories small-text" v-if="active">
+  <div class="categories small-text" v-if="isActiveOrMain">
     <div
       class="categories__item btn"
       v-for="value in info.categories"
@@ -41,7 +41,26 @@ export default {
   props: {
     info: Object,
     order: Number,
-    active: Boolean
+    mode: String
+  },
+
+  computed: {
+    rootClass () {
+      switch (this.mode) {
+        case 'default':
+          return 'baseInfo'
+        case 'active':
+          return 'baseInfo--active'
+        case 'mobileMain':
+          return 'baseInfo--mobileMain'
+        default:
+          return 'baseInfo'
+      }
+    },
+
+    isActiveOrMain () {
+      return this.mode === 'active' || this.mode === 'mobileMain'
+    }
   },
 
   methods: {
@@ -64,6 +83,7 @@ export default {
 
 .baseInfo {
   display: grid;
+  grid-area: baseInfo;
   grid-template-columns: 0.24rem 1fr 0.8rem;
   grid-template-areas:
     ". . duration"
@@ -75,24 +95,44 @@ export default {
   @media (min-width: $md) {
     grid-template-columns: 0.35rem 1fr 1.75rem;
   }
+}
 
-  &.active {
-    display: grid;
-    grid-column-gap: 0.16rem;
-    grid-row-gap: 0.06rem;
+.baseInfo--active {
+  @extend .baseInfo;
+
+  @media (min-width: $md) {
+    grid-column-gap: 0.24rem;
+    grid-row-gap: 0.2rem;
     grid-template-columns: auto auto 1fr;
     grid-template-areas:
       "order . . "
       "title title title"
       "recordedAt location categories";
-    grid-area: baseInfo;
+  }
 
+  .duration {
     @media (min-width: $md) {
-      grid-template-columns: auto auto 1fr;
-      grid-column-gap: 0.24rem;
-      grid-row-gap: 0.2rem;
+      display: none;
     }
   }
+
+  .location, categories {
+    @media (max-width: $md) {
+      display: none;
+    }
+  }
+}
+
+.baseInfo--mobileMain {
+  @extend .baseInfo;
+
+  grid-column-gap: 0.16rem;
+  grid-row-gap: 0.08rem;
+  grid-template-columns: auto auto 1fr;
+  grid-template-areas:
+    "order . . "
+    "title title title"
+    "recordedAt location categories";
 }
 
 .duration {
@@ -100,6 +140,7 @@ export default {
   justify-self: right;
 
   background: $gunmetalBlack--l5;
+  color: black;
   text-align: center;
 
   padding: 0 0.08rem;
@@ -134,14 +175,18 @@ export default {
 
 .location {
   grid-area: location;
+
+  @media (max-width: $md) {
+    display: none;
+  }
 }
 
 .categories {
-  display: grid;
-  grid-column-gap: 0.24rem;
-  grid-template-columns: repeat(auto-fill, 0.72rem);
+  display: none;
 
   @media (min-width: $md) {
+    display: grid;
+    grid-column-gap: 0.24rem;
     grid-template-columns: repeat(auto-fill, 0.9rem);
   }
   grid-area: categories;

@@ -1,17 +1,17 @@
 <template>
-<div :class="['small-text', setTimelineItemClass]">
+<div :class="['small-text', rootClass]">
   <div class="timelineItem__body">
 
-    <div id="player" class="player" v-if="active"></div>
+    <div id="player" class="player"></div>
 
-    <div class="secondaryTitle" v-if="active">
+    <div class="secondaryTitle">
       <router-link to="/" class="secondaryTitle__backToHome">&lt; 回首頁</router-link>
       <div class="secondaryTitle__timelineName">{{specifiedTimeline.name}}</div>
     </div>
 
-    <descriptions :info="video" v-if="active" />
+    <descriptions :info="video" />
 
-    <base-info :info="video" :order="index" :active="active" />
+    <base-info :info="video" :order="index" :mode="mode" />
 
   </div>
 
@@ -40,7 +40,7 @@ export default {
   props: {
     vid: String,
     index: Number,
-    active: Boolean
+    mode: String
   },
 
   computed: {
@@ -52,11 +52,16 @@ export default {
       getVideo: 'videos/getSpecifiedVideo'
     }),
 
-    setTimelineItemClass () {
-      if (this.active) {
-        return 'timelineItem--active'
-      } else {
-        return 'timelineItem'
+    rootClass () {
+      switch (this.mode) {
+        case 'default':
+          return 'timelineItem'
+        case 'active':
+          return 'timelineItem--active'
+        case 'mobileMain':
+          return 'timelineItem--mobileMain'
+        default:
+          return 'timelineItem'
       }
     }
   },
@@ -72,48 +77,64 @@ export default {
 @import "../assets/stylesheets/timeline-shared-styles";
 
 .timelineItem {
-  grid-column: 2 / 3;
   cursor: pointer;
 
-  &__body {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: auto;
-    grid-template-area: "baseInfo";
+  @media (min-width: $md) {
+    grid-column: 2 / 3;
+  }
+}
 
-    padding-bottom: 0.16rem;
+.timelineItem__body {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto;
+  grid-template-areas: "baseInfo";
 
-    border: 0.01rem solid #232a3c38; /* To Josie - can't find this color in styleguide */
+  padding-bottom: 0.16rem;
 
-    transition: .3s;
+  border: 0.01rem solid #232a3c38; /* To Josie - can't find this color in styleguide */
 
-    @media (min-width: $md) {
-      padding: 0.06rem 0.06rem 0.36rem 0.18rem;
+  transition: .3s;
 
-      border-width: 0.02rem;
-      border-radius: 0.04rem;
-      box-shadow: 0.06rem 0.06rem $japaneseIndigoBlue--l3;
+  @media (min-width: $md) {
+    padding: 0.06rem 0.06rem 0.36rem 0.18rem;
 
-      &:hover {
-        border-color: $pokemonRed--l2;
-        box-shadow: 0.06rem 0.06rem $pokemonRed--l1;
-      }
+    border-width: 0.02rem;
+    border-radius: 0.04rem;
+    box-shadow: 0.06rem 0.06rem $japaneseIndigoBlue--l3;
+
+    &:hover {
+      border-color: $pokemonRed--l2;
+      box-shadow: 0.06rem 0.06rem $pokemonRed--l1;
+    }
+  }
+}
+
+.timelineItem {
+  .timelineItem__body {
+    /* won't show player and secondaryTitle in default state */
+    .player, .secondaryTitle, .descriptions {
+      display: none;
     }
   }
 }
 
 .timelineItem--active {
   grid-column: 1 / -1; /* take the whole row */
-  cursor: auto;
-
-  background: #232a3c; /* To Josie - can't find this color in styleguide */
-  color: white;
 
   .timelineItem__body {
-    padding: 0;
+    background: #232a3c; /* To Josie - can't find this color in styleguide */
+    color: white;
 
     border: none;
     box-shadow: none;
+
+    @media (max-width: $md) {
+      /* only show player and secondaryTitle in PC and tablet use cases */
+      .player, .secondaryTitle, .descriptions {
+        display: none;
+      }
+    }
 
     @media (min-width: $md) {
       @include column__large;  /* source: timeline-shared-styles */
@@ -123,6 +144,8 @@ export default {
         ". player ."
         ". baseInfo ."
         ". descriptions .";
+
+      padding: 0;
     }
 
     @media (min-width: $xl) {
@@ -139,37 +162,55 @@ export default {
   }
 }
 
+.timelineItem--mobileMain {
+  @media (min-width: $md) {
+    display: none;
+  }
+
+  .timelineItem__body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 0.28rem 1.02rem 1fr;
+    grid-template-areas:
+      "player"
+      "secondaryTitle"
+      "baseInfo"
+      "descriptions";
+
+    background: #232a3c; /* To Josie - can't find this color in styleguide */
+    color: white;
+
+    border: none;
+    box-shadow: none;
+  }
+}
+
 .player {
   grid-area: player;
+  width: 100%;
+
+  padding-top: 56%;
+
   border: 1px solid white;
 
   @media (min-width: $md) {
-    width: 100%;
     height: 100%;
+    padding: 0;
   }
 }
 
 .secondaryTitle {
   display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "backToHome timelineName";
   align-items: center;
   grid-area: secondaryTitle;
 
   font-size: 0.2rem;
 
-  @media (min-width: $md) {
-    grid-template-columns: auto 1fr;
-    grid-template-areas: "backToHome timelineName";
-  }
-
   &__backToHome {
-    display: none;
     grid-area: backToHome;
 
     color: $pokemonRed;
-
-    @media (min-width: $md) {
-      display: block;
-    }
   }
 
   &__timelineName {

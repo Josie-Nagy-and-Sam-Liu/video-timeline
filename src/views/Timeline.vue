@@ -6,7 +6,7 @@
       :key="key"
       :vid="key"
       :index="index"
-      :active="nowFocusOn === index"
+      :mode="(nowFocusOn === index ? 'active' : 'default')"
       @click.native="nowFocusOn = index"
     />
   </div>
@@ -61,8 +61,8 @@ export default {
   },
 
   destroyed () {
-    // We found that the videos of the last timeline may display in a flash
-    // because the asyc call of fetchVideo hasn't finished the state
+    // We found that the videos of the last timeline may remain displaying in a flash
+    // It is because the asyc call of fetchVideo hasn't finished yet
     // To solve that, we clean the all in videos store everytime user leave this page to avoid it
     this.$store.commit('videos/setVideos', {})
   }
