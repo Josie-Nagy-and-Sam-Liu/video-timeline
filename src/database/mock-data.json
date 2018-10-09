@@ -53,7 +53,7 @@
       },
       "duration" : "PT19M39S",
       "location" : "台灣 台北",
-      "recordedAt" : "2018-09-11",
+      "recordedAt" : 1536624000000,
       "timelineId" : "t0",
       "title" : "超夢團戰月，地區限定寶可夢，究極獎勵公開！【劉沛 寶可夢³ 45】"
     },
@@ -65,7 +65,7 @@
       },
       "duration" : "PT11M22S",
       "location" : "捷克 布拉格",
-      "recordedAt" : "2017-11-25",
+      "recordedAt" : 1511568000000,
       "timelineId" : "t1",
       "title" : "歐洲的火車中途會分裂，去兩個不同國家？！【遊沛歐洲 1】"
     },
@@ -77,7 +77,7 @@
       },
       "duration" : "PT12M37S",
       "location" : "日本 東京",
-      "recordedAt" : "2018-09-17",
+      "recordedAt" : 1537142400000,
       "timelineId" : "t0",
       "title" : "寶可夢中心對決！根本就是寶可夢迷的購物天堂！【劉沛 VLOG】"
     }
