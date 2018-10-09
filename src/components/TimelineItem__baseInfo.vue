@@ -6,7 +6,7 @@
   </div>
 
   <div class="order small-text">
-    {{order + 1}}
+    {{order}}
   </div>
 
   <div class="title body-copy" :title="info.title">
@@ -35,16 +35,26 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'baseInfo',
 
   props: {
     info: Object,
-    order: Number,
+    vid: String,
     mode: String
   },
 
   computed: {
+    ...mapState({
+      videoIds: state => state.videos.sortedVideoIds
+    }),
+
+    order () {
+      return this.videoIds.indexOf(this.vid) + 1
+    },
+
     rootClass () {
       switch (this.mode) {
         case 'default':
@@ -70,9 +80,14 @@ export default {
       return duration.toString().replace(/(PT|S)/g, '').replace(/(H|M)/g, ':')
     },
 
-    formatRecordedAt (date) {
-      let spDate = date.split('-') // 0: year, 1: month, 2: day
-      return Number(spDate[1]) + '月' + Number(spDate[2]) + '日'
+    formatRecordedAt (unixDate) {
+      // format unix time into yyyy-mm-dd
+      let date = new Date(unixDate)
+      // let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let day = ('0' + date.getDate()).substr(-2)
+
+      return month + '月' + day + '日'
     }
   }
 }
@@ -80,6 +95,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/stylesheets/styleguide";
+@import "../assets/stylesheets/timeline-shared-styles";
 
 .baseInfo {
   display: grid;
@@ -116,7 +132,7 @@ export default {
     }
   }
 
-  .location, categories {
+  .location, .categories {
     @media (max-width: $md) {
       display: none;
     }
@@ -133,6 +149,16 @@ export default {
     "order . . "
     "title title title"
     "recordedAt location categories";
+
+  padding: 0 $mobileMainPadding; /* source: timeline-shared-styles */
+
+  .duration {
+    display: none;
+  }
+
+  .order {
+    justify-self: stretch;
+  }
 }
 
 .duration {
@@ -175,20 +201,12 @@ export default {
 
 .location {
   grid-area: location;
-
-  @media (max-width: $md) {
-    display: none;
-  }
 }
 
 .categories {
-  display: none;
-
-  @media (min-width: $md) {
-    display: grid;
-    grid-column-gap: 0.24rem;
-    grid-template-columns: repeat(auto-fill, 0.9rem);
-  }
+  display: grid;
+  grid-column-gap: 0.24rem;
+  grid-template-columns: repeat(auto-fill, 0.9rem);
   grid-area: categories;
 
   &__item {

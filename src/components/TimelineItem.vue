@@ -11,7 +11,7 @@
 
     <descriptions :info="video" />
 
-    <base-info :info="video" :order="index" :mode="mode" />
+    <base-info :info="video" :vid="vid" :mode="mode" />
 
   </div>
 
@@ -33,7 +33,7 @@ export default {
 
   data () {
     return {
-      video: null
+      video: {}
     }
   },
 
@@ -45,7 +45,8 @@ export default {
 
   computed: {
     ...mapState({
-      specifiedTimeline: state => state.timelines.specifiedOne
+      specifiedTimeline: state => state.timelines.specifiedOne,
+      videos: state => state.videos.all
     }),
 
     ...mapGetters({
@@ -68,6 +69,12 @@ export default {
 
   created () {
     this.video = this.getVideo(this.vid)
+  },
+
+  watch: {
+    vid: function (val) {
+      this.video = this.getVideo(val)
+    }
   }
 }
 </script>
@@ -163,6 +170,8 @@ export default {
 }
 
 .timelineItem--mobileMain {
+  border-bottom: 0.05rem solid #d8d8d8;
+
   @media (min-width: $md) {
     display: none;
   }
@@ -179,8 +188,14 @@ export default {
     background: #232a3c; /* To Josie - can't find this color in styleguide */
     color: white;
 
+    padding: 0;
+
     border: none;
     box-shadow: none;
+
+    .secondaryTitle, .descriptions {
+      padding: 0 $mobileMainPadding; /* source: timeline-shared-styles */
+    }
   }
 }
 

@@ -12,7 +12,7 @@
     <div class="groups">
       <group-item
         v-for="(timeline, key, index) in timelines"
-        :key=timeline.name
+        :key="'Home__' + key"
         :info="timeline"
         :theme="themes[index % 4]"
         @click.native="$router.push({ name: 'timeline', params: {timelineId: key} })"

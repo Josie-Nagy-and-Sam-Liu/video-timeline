@@ -2,12 +2,18 @@
 <div class="timeline">
   <div :class="setContainerClass">
     <timeline-item
-      v-for="(video, key, index) in videos"
-      :key="key"
-      :vid="key"
+      :vid="nowFocusOn"
+      :index="1"
+      mode="mobileMain"
+      v-if="nowFocusOn"
+    />
+    <timeline-item
+      v-for="(videoId, index) in videoIds"
+      :key="'Timeline__' + videoId"
+      :vid="videoId"
       :index="index"
-      :mode="(nowFocusOn === index ? 'active' : 'default')"
-      @click.native="nowFocusOn = index"
+      :mode="(nowFocusOn === videoId ? 'active' : 'default')"
+      @click.native="nowFocusOn = videoId"
     />
   </div>
 </div>
@@ -31,7 +37,7 @@ export default {
 
   computed: {
     ...mapState({
-      videos: state => state.videos.all,
+      videoIds: state => state.videos.sortedVideoIds,
       specifiedTimeline: state => state.timelines.specifiedOne
     }),
 
@@ -54,10 +60,10 @@ export default {
   },
 
   created () {
-    // fetch all videos of the timeline with timelineId
-    this.fetchVideos(this.$route.params.timelineId)
     // fetch the information of the timemline with timelineId
     this.fetchSpecifiedTimeline(this.$route.params.timelineId)
+    // fetch all videos of the timeline with timelineId
+    this.fetchVideos(this.$route.params.timelineId)
   },
 
   destroyed () {
@@ -65,6 +71,7 @@ export default {
     // It is because the asyc call of fetchVideo hasn't finished yet
     // To solve that, we clean the all in videos store everytime user leave this page to avoid it
     this.$store.commit('videos/setVideos', {})
+    this.$store.commit('videos/setSortedVideoIds', [])
   }
 }
 </script>
