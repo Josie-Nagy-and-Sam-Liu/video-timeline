@@ -2,25 +2,25 @@
 <div class="timeline">
   <div :class="setContainerClass">
     <timeline-item
-      :vid="nowFocusOn"
-      :index="1"
+      :vid="videoIds[nowFocusOn]"
+      :index="nowFocusOn"
       mode="mobileMain"
-      v-if="nowFocusOn"
+      v-if="nowFocusOn >= 0"
     />
     <timeline-item
       v-for="(videoId, index) in videoIds"
       :key="'Timeline__' + videoId"
       :vid="videoId"
       :index="index"
-      :mode="(nowFocusOn === videoId ? 'active' : 'default')"
-      @click.native="nowFocusOn = videoId"
+      :mode="(nowFocusOn === index ? 'active' : 'default')"
+      @click.native="setNowFocusOn(index)"
     />
   </div>
 </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import TimelineItem from '@/components/TimelineItem'
 
 export default {
@@ -31,18 +31,18 @@ export default {
 
   data () {
     return {
-      nowFocusOn: null
     }
   },
 
   computed: {
     ...mapState({
+      specifiedTimeline: state => state.timelines.specifiedOne,
       videoIds: state => state.videos.sortedVideoIds,
-      specifiedTimeline: state => state.timelines.specifiedOne
+      nowFocusOn: state => state.videos.nowFocusOn
     }),
 
     setContainerClass () {
-      if (this.nowFocusOn === null) {
+      if (this.nowFocusOn === -1) {
         // no video is selected yet
         return 'container'
       } else {
@@ -56,6 +56,11 @@ export default {
     ...mapActions({
       fetchVideos: 'videos/fetchVideos',
       fetchSpecifiedTimeline: 'timelines/fetchSpecifiedTimeline'
+    }),
+
+    ...mapMutations({
+      setNowFocusOn: 'videos/setNowFocusOn',
+      resetState: 'videos/resetState'
     })
   },
 
@@ -70,8 +75,7 @@ export default {
     // We found that the videos of the last timeline may remain displaying in a flash
     // It is because the asyc call of fetchVideo hasn't finished yet
     // To solve that, we clean the all in videos store everytime user leave this page to avoid it
-    this.$store.commit('videos/setVideos', {})
-    this.$store.commit('videos/setSortedVideoIds', [])
+    this.resetState()
   }
 }
 </script>

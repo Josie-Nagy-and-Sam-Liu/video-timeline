@@ -5,7 +5,8 @@ export default {
 
   state: {
     all: {}, // the videos belong to the specifiedTimeline
-    sortedVideoIds: []
+    sortedVideoIds: [],
+    nowFocusOn: -1
   },
 
   getters: {
@@ -35,6 +36,16 @@ export default {
 
     setSortedVideoIds (state, idList) {
       state.sortedVideoIds = idList
+    },
+
+    setNowFocusOn (state, videoIndex) {
+      state.nowFocusOn = videoIndex
+    },
+
+    resetState (state) {
+      state.all = {}
+      state.sortedVideoIds = []
+      state.nowFocusOn = -1
     }
   }
 }
