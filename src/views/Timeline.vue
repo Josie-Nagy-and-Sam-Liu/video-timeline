@@ -1,5 +1,7 @@
 <template>
 <div class="timeline">
+  <video-player />
+
   <div :class="setContainerClass">
     <timeline-item
       :vid="videoIds[nowFocusOn]"
@@ -11,7 +13,7 @@
       v-for="(videoId, index) in videoIds"
       :key="'Timeline__' + videoId"
       :vid="videoId"
-      :index="index"
+      :videoIndex="index"
       :mode="(nowFocusOn === index ? 'active' : 'default')"
       @click.native="setNowFocusOn(index)"
     />
@@ -22,11 +24,13 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import TimelineItem from '@/components/TimelineItem'
+import VideoPlayer from '@/components/VideoPlayer'
 
 export default {
   name: 'timeline',
   components: {
-    TimelineItem
+    TimelineItem,
+    VideoPlayer
   },
 
   data () {
@@ -36,6 +40,7 @@ export default {
 
   computed: {
     ...mapState({
+      windowWidth: state => state.windowWidth,
       specifiedTimeline: state => state.timelines.specifiedOne,
       videoIds: state => state.videos.sortedVideoIds,
       nowFocusOn: state => state.videos.nowFocusOn

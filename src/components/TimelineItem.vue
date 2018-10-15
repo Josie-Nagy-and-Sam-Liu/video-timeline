@@ -2,7 +2,9 @@
 <div :class="['small-text', rootClass]">
   <div class="timelineItem__body">
 
-    <div id="player" class="player"></div>
+    <div class="player">
+      <portal-target :name="mode + '__' + vid" slim></portal-target>
+    </div>
 
     <div class="secondaryTitle">
       <router-link to="/" class="secondaryTitle__backToHome">&lt; 回首頁</router-link>
@@ -39,12 +41,13 @@ export default {
 
   props: {
     vid: String,
-    index: Number,
-    mode: String
+    videoIndex: Number,
+    mode: String // default, active or mobileMain
   },
 
   computed: {
     ...mapState({
+      windowWidth: state => state.windowWidth,
       specifiedTimeline: state => state.timelines.specifiedOne,
       videos: state => state.videos.all
     }),
@@ -200,12 +203,11 @@ export default {
 }
 
 .player {
+  position: relative;
   grid-area: player;
   width: 100%;
 
   padding-top: 56%;
-
-  border: 1px solid white;
 
   @media (min-width: $md) {
     height: 100%;

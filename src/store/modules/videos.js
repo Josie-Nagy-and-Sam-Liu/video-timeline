@@ -6,12 +6,21 @@ export default {
   state: {
     all: {}, // the videos belong to the specifiedTimeline
     sortedVideoIds: [],
-    nowFocusOn: -1
+    nowFocusOn: -1,
+    isYouTubeIframeAPIReady: false
   },
 
   getters: {
     getSpecifiedVideo: (state) => (videoId) => {
       return state.all[videoId]
+    },
+
+    getVideoId: (state) => (index) => {
+      return state.sortedVideoIds[index]
+    },
+
+    getNowFocusOn (state) {
+      return state.nowFocusOn
     }
   },
 
@@ -40,6 +49,10 @@ export default {
 
     setNowFocusOn (state, videoIndex) {
       state.nowFocusOn = videoIndex
+    },
+
+    setIsYouTubeIframeAPIReady (state, isReady) {
+      state.isYouTubeIframeAPIReady = isReady
     },
 
     resetState (state) {

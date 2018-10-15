@@ -13,6 +13,7 @@ export default new Vuex.Store({
   },
 
   state: {
+    windowWidth: 0
   },
 
   getters: {
@@ -22,5 +23,8 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    setWindowWidth (state, width) {
+      state.windowWidth = width
+    }
   }
 })
