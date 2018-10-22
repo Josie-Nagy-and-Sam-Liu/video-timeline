@@ -6,7 +6,7 @@ export default {
   state: {
     all: {}, // the videos belong to the specifiedTimeline
     sortedVideoIds: [],
-    nowFocusOn: -1,
+    nowFocusOn: -10,
     isYouTubeIframeAPIReady: false
   },
 
@@ -61,7 +61,7 @@ export default {
     resetState (state) {
       state.all = {}
       state.sortedVideoIds = []
-      state.nowFocusOn = -1
+      state.nowFocusOn = -10
     }
   }
 }

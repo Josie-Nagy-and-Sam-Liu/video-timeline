@@ -69,11 +69,14 @@ export default {
     /*
       set the mode of timelineItems in the v-for
       input: index (from v-for)
-      output: String ('active' or 'default')
+      output: String ('default', 'active' or 'prevVideo')
     */
     timelineItemMode (index) {
       if (index === this.nowFocusOn) {
         return 'active'
+      }
+      if (index === this.nowFocusOn + 1) {
+        return 'prevVideo'
       }
       return 'default'
     },

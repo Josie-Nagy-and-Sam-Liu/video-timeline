@@ -12,7 +12,7 @@
     <div class="header__extendedBg" v-if="showIf(['active']) && videoIndex > 0"></div>
 
     <div class="caption text-left" v-if="showIf(['nextVideo'])">下部影片</div>
-    <div class="caption text-right" v-if="showIf(['prevVideo'])">較舊的影片</div>
+    <div class="caption text-right" v-if="showIf(['prevVideo']) && windowWidth > 768">較舊的影片</div>
   </div>
 
   <div class="timelineItem__body" @click="setNowFocusOn(videoIndex)">
@@ -201,6 +201,8 @@ $itemBg--active: #232a3c; /* To Josie - can't find this color in styleguide */
 
     background: $itemBg--active;
     color: white;
+
+    border-radius: 0;
 
     @media (max-width: $md) {
       /* only show these components in PC and tablet use cases */
