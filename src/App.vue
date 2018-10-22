@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <nav>
-    </nav>
+    <navbar />
     <router-view/>
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
+import Navbar from '@/components/Navbar'
 
 export default {
+  components: {
+    Navbar
+  },
+
   methods: {
     ...mapMutations({
       setWindowWidth: 'setWindowWidth',
@@ -55,6 +59,7 @@ html {
 *,
 *:before,
 *:after {
+  position: relative;
   box-sizing: border-box;
 }
 
@@ -67,9 +72,5 @@ body {
 
 button {
   font-family: inherit;
-}
-
-nav {
-  height: 0.56rem;
 }
 </style>

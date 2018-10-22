@@ -5,17 +5,18 @@
   <div :class="setContainerClass">
     <timeline-item
       :vid="videoIds[nowFocusOn]"
-      :index="nowFocusOn"
+      :videoIndex="nowFocusOn"
       mode="mobileMain"
       v-if="nowFocusOn >= 0"
     />
+
     <timeline-item
       v-for="(videoId, index) in videoIds"
       :key="'Timeline__' + videoId"
       :vid="videoId"
       :videoIndex="index"
-      :mode="(nowFocusOn === index ? 'active' : 'default')"
-      @click.native="setNowFocusOn(index)"
+      :mode="timelineItemMode(index)"
+      v-if="isTimelineItemShown(index)"
     />
   </div>
 </div>
@@ -23,13 +24,11 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
-import TimelineItem from '@/components/TimelineItem'
 import VideoPlayer from '@/components/VideoPlayer'
 
 export default {
   name: 'timeline',
   components: {
-    TimelineItem,
     VideoPlayer
   },
 
@@ -64,9 +63,34 @@ export default {
     }),
 
     ...mapMutations({
-      setNowFocusOn: 'videos/setNowFocusOn',
       resetState: 'videos/resetState'
-    })
+    }),
+
+    /*
+      set the mode of timelineItems in the v-for
+      input: index (from v-for)
+      output: String ('active' or 'default')
+    */
+    timelineItemMode (index) {
+      if (index === this.nowFocusOn) {
+        return 'active'
+      }
+      return 'default'
+    },
+
+    /*
+      check if the timelineItem in the v-for should be shown
+      input: index (from v-for)
+      output: Boolean (true => show, false => don't show)
+    */
+    isTimelineItemShown (index) {
+      // show IF it's not the nextVideo OR now is in mobile layout
+      if (index !== this.nowFocusOn - 1 || this.windowWidth < 768) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
 
   created () {
@@ -91,7 +115,7 @@ export default {
 
 .container {
   display: grid;
-  grid-template-columns: [contain] 100%;
+  grid-template-columns: [item-start] 100% [item-stop];
   grid-template-rows: auto;
 
   transition: .3s;

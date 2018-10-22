@@ -10,6 +10,7 @@ $lg: 992px;
 $xl: 1200px;
 
 // Typographic -------------------
+
 .display {
   font-size: 0.64rem;
 }
@@ -41,6 +42,20 @@ h3, .sub-sub-header {
 
 .caption, .small-text {
   font-size: 0.13rem;
+}
+
+.text {
+  &-right {
+    text-align: right;
+  }
+
+  &-center {
+    text-align: center;
+  }
+
+  &-left {
+    text-align: left;
+  }
 }
 
 // color pallete ------------------
@@ -87,6 +102,7 @@ $eucalyptusGreen--l2: #89dbc9;
 $eucalyptusGreen--l3: #cceae4;
 
 // button(-like) style
+
 .btn {
   height: 0.24rem;
   

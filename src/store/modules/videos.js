@@ -26,9 +26,12 @@ export default {
 
   actions: {
     fetchVideos ({ state, dispatch, commit }, timelineId) {
-      firebase.database().ref('videos').orderByChild('timelineId').equalTo(timelineId).once('value', videos => {
-        commit('setVideos', videos.val())
-        dispatch('sortVideos')
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('videos').orderByChild('timelineId').equalTo(timelineId).once('value', videos => {
+          commit('setVideos', videos.val())
+          dispatch('sortVideos')
+          resolve()
+        })
       })
     },
 

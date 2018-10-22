@@ -10,6 +10,9 @@ import firebaseConfig from '@/database/config'
 import PortalVue from 'portal-vue'
 Vue.use(PortalVue)
 
+// global components
+Vue.component('timeline-item', () => import('@/components/TimelineItem'))
+
 Vue.config.productionTip = false
 
 const config = firebaseConfig

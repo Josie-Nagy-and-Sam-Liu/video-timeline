@@ -1,17 +1,32 @@
 <template>
 <div :class="['small-text', rootClass]">
-  <div class="timelineItem__body">
 
-    <div class="player">
+  <div class="timelineItem__header">
+    <!-- the next video -->
+    <timeline-item
+      :videoIndex="videoIndex - 1"
+      mode="nextVideo"
+      v-if="showIf(['active']) && videoIndex > 0"
+    />
+    <!-- header half-high background -->
+    <div class="header__extendedBg" v-if="showIf(['active']) && videoIndex > 0"></div>
+
+    <div class="caption text-left" v-if="showIf(['nextVideo'])">下部影片</div>
+    <div class="caption text-right" v-if="showIf(['prevVideo'])">較舊的影片</div>
+  </div>
+
+  <div class="timelineItem__body" @click="setNowFocusOn(videoIndex)">
+
+    <div class="player" v-show="showIf(['active', 'mobileMain'])">
       <portal-target :name="mode + '__' + vid" slim></portal-target>
     </div>
 
-    <div class="secondaryTitle">
+    <div class="secondaryTitle" v-if="showIf(['active', 'mobileMain'])">
       <router-link to="/" class="secondaryTitle__backToHome">&lt; 回首頁</router-link>
       <div class="secondaryTitle__timelineName">{{specifiedTimeline.name}}</div>
     </div>
 
-    <descriptions :info="video" />
+    <descriptions :info="video" v-if="showIf(['active', 'mobileMain'])" />
 
     <base-info :info="video" :vid="vid" :mode="mode" />
 
@@ -21,7 +36,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import descriptions from '@/components/TimelineItem__descriptions'
 import baseInfo from '@/components/TimelineItem__baseInfo'
 
@@ -40,21 +55,25 @@ export default {
   },
 
   props: {
-    vid: String,
     videoIndex: Number,
-    mode: String // default, active or mobileMain
+    mode: String // default, active, nextVideo, prevVideo or mobileMain
   },
 
   computed: {
     ...mapState({
       windowWidth: state => state.windowWidth,
       specifiedTimeline: state => state.timelines.specifiedOne,
-      videos: state => state.videos.all
+      videos: state => state.videos.sortedVideoIds,
+      nowFocusOn: state => state.videos.noFocusOn
     }),
 
     ...mapGetters({
       getVideo: 'videos/getSpecifiedVideo'
     }),
+
+    vid () {
+      return this.videos[this.videoIndex]
+    },
 
     rootClass () {
       switch (this.mode) {
@@ -62,6 +81,8 @@ export default {
           return 'timelineItem'
         case 'active':
           return 'timelineItem--active'
+        case 'nextVideo':
+          return 'timelineItem--nextVideo'
         case 'mobileMain':
           return 'timelineItem--mobileMain'
         default:
@@ -70,14 +91,27 @@ export default {
     }
   },
 
-  created () {
-    this.video = this.getVideo(this.vid)
+  methods: {
+    ...mapMutations({
+      setNowFocusOn: 'videos/setNowFocusOn'
+    }),
+
+    /*
+      decide the element to be shown in which conditions
+      input: an array of modes whom will show this element
+      output: Boolean (ture => show, false => don't show)
+    */
+    showIf (modeArray) {
+      if (modeArray.indexOf(this.mode) >= 0) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
 
-  watch: {
-    vid: function (val) {
-      this.video = this.getVideo(val)
-    }
+  created () {
+    this.video = this.getVideo(this.vid)
   }
 }
 </script>
@@ -86,23 +120,18 @@ export default {
 @import "../assets/stylesheets/styleguide";
 @import "../assets/stylesheets/timeline-shared-styles";
 
-.timelineItem {
-  cursor: pointer;
+$itemBg--active: #232a3c; /* To Josie - can't find this color in styleguide */
 
-  @media (min-width: $md) {
-    grid-column: 2 / 3;
-  }
-}
-
-.timelineItem__body {
+/* base styles of timelineItem__body */
+%timelineItem__body__baseStyle {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
   grid-template-areas: "baseInfo";
 
-  padding-bottom: 0.16rem;
+  background: white;
 
-  border: 0.01rem solid #232a3c38; /* To Josie - can't find this color in styleguide */
+  padding-bottom: 0.16rem;
 
   transition: .3s;
 
@@ -111,36 +140,70 @@ export default {
 
     border-width: 0.02rem;
     border-radius: 0.04rem;
-    box-shadow: 0.06rem 0.06rem $japaneseIndigoBlue--l3;
-
-    &:hover {
-      border-color: $pokemonRed--l2;
-      box-shadow: 0.06rem 0.06rem $pokemonRed--l1;
-    }
   }
 }
 
 .timelineItem {
-  .timelineItem__body {
-    /* won't show player and secondaryTitle in default state */
-    .player, .secondaryTitle, .descriptions {
-      display: none;
+  grid-column: item-start / item-stop;
+  cursor: pointer;
+
+  > .timelineItem__body {
+    @extend %timelineItem__body__baseStyle;
+
+    border: 0.01rem solid #232a3c38; /* To Josie - can't find this color in styleguide */
+
+    @media (min-width: $md) {
+      box-shadow: 0.06rem 0.06rem $japaneseIndigoBlue--l3;
+
+      &:hover {
+        border-color: $pokemonRed--l2;
+        box-shadow: 0.06rem 0.06rem $pokemonRed--l1;
+      }
     }
   }
 }
 
 .timelineItem--active {
+  display: grid;
   grid-column: 1 / -1; /* take the whole row */
 
-  .timelineItem__body {
-    background: #232a3c; /* To Josie - can't find this color in styleguide */
+  > .timelineItem__header {
+    display: none;
+
+    @media (min-width: $md) {
+      display: grid;
+      @include column__large;  /* source: timeline-shared-styles */
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        ". nextVideo ."
+        ". nextVideo .";
+    }
+
+    @media (min-width: $xl) {
+      @include column__large--active;  /* source: timeline-shared-styles */
+      grid-template-areas:
+        ". nextVideo . ."
+        ". nextVideo editBtns .";
+    }
+
+    .header__extendedBg {
+      grid-column: 1 / -1;
+      grid-row: 2 / -1;
+      height: 0.45rem;
+      z-index: 0;
+
+      background: $itemBg--active;
+    }
+  }
+
+  > .timelineItem__body {
+    @extend %timelineItem__body__baseStyle;
+
+    background: $itemBg--active;
     color: white;
 
-    border: none;
-    box-shadow: none;
-
     @media (max-width: $md) {
-      /* only show player and secondaryTitle in PC and tablet use cases */
+      /* only show these components in PC and tablet use cases */
       .player, .secondaryTitle, .descriptions {
         display: none;
       }
@@ -155,7 +218,7 @@ export default {
         ". baseInfo ."
         ". descriptions .";
 
-      padding: 0;
+      padding: 0.2rem 0 0 0;
     }
 
     @media (min-width: $xl) {
@@ -167,8 +230,20 @@ export default {
         ". player descriptions ."
         ". baseInfo descriptions .";
 
-      padding-bottom: 0.45rem;
+      padding: 0.4rem 0 0.45rem 0;
     }
+  }
+}
+
+.timelineItem--nextVideo {
+  grid-area: nextVideo;
+  z-index: 1;
+
+  > .timelineItem__body {
+    @extend %timelineItem__body__baseStyle;
+    cursor: pointer;
+
+    border: 0.01rem solid #232a3c38; /* To Josie - can't find this color in styleguide */
   }
 }
 
@@ -179,7 +254,9 @@ export default {
     display: none;
   }
 
-  .timelineItem__body {
+  > .timelineItem__body {
+    @extend %timelineItem__body__baseStyle;
+
     grid-template-columns: 1fr;
     grid-template-rows: auto 0.28rem 1.02rem 1fr;
     grid-template-areas:
@@ -188,13 +265,10 @@ export default {
       "baseInfo"
       "descriptions";
 
-    background: #232a3c; /* To Josie - can't find this color in styleguide */
+    background: $itemBg--active;
     color: white;
 
     padding: 0;
-
-    border: none;
-    box-shadow: none;
 
     .secondaryTitle, .descriptions {
       padding: 0 $mobileMainPadding; /* source: timeline-shared-styles */

@@ -38,7 +38,7 @@ export default {
 
     player () {
       // if the YouTube iframe Api is ready => new the plyer on the iframe
-      // the nowFocusOn in if is to let the player re-render everytime
+      // the nowFocusOn in if is to let the player re-render everytime nowFocusOn changed
       if (this.isYouTubeIframeAPIReady && this.nowFocusOn >= 0) {
         let player = new YT.Player('videoPlayer', {
           events: {
