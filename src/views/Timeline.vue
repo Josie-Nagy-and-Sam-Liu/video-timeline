@@ -4,7 +4,6 @@
 
   <div :class="setContainerClass">
     <timeline-item
-      :vid="videoIds[nowFocusOn]"
       :videoIndex="nowFocusOn"
       mode="mobileMain"
       v-if="nowFocusOn >= 0"
@@ -13,7 +12,6 @@
     <timeline-item
       v-for="(videoId, index) in videoIds"
       :key="'Timeline__' + videoId"
-      :vid="videoId"
       :videoIndex="index"
       :mode="timelineItemMode(index)"
       v-if="isTimelineItemShown(index)"
@@ -46,7 +44,7 @@ export default {
     }),
 
     setContainerClass () {
-      if (this.nowFocusOn === -1) {
+      if (this.nowFocusOn < 0) {
         // no video is selected yet
         return 'container'
       } else {
@@ -118,7 +116,7 @@ export default {
 
 .container {
   display: grid;
-  grid-template-columns: [item-start] 100% [item-stop];
+  grid-template-columns: [item-start] 100% [item-end];
   grid-template-rows: auto;
 
   transition: .3s;

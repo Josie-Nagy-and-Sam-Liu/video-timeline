@@ -1,11 +1,11 @@
 // Layout
 @mixin column__large () {
-  grid-template-columns: 1fr [item-start] 7.41rem [item-stop] 1fr;
+  grid-template-columns: 1fr [item-start] 7.41rem [item-end] 1fr;
 }
 
 @mixin column__large--active () {
   grid-column-gap: 0.3rem;
-  grid-template-columns: 1fr [item-start] 7.41rem [item-stop] 3.6rem 1fr;
+  grid-template-columns: 1fr [item-start] 7.41rem [item-end] 3.6rem 1fr;
 }
 
 // mobileMain padding

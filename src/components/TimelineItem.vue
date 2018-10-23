@@ -144,7 +144,7 @@ $itemBg--active: #232a3c; /* To Josie - can't find this color in styleguide */
 }
 
 .timelineItem {
-  grid-column: item-start / item-stop;
+  grid-column: item-start / item-end;
   cursor: pointer;
 
   > .timelineItem__body {

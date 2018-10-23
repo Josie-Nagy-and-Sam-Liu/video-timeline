@@ -26,13 +26,11 @@
 // @ is an alias to /src
 import { mapState, mapActions } from 'vuex'
 import GroupItem from '@/components/GroupItem.vue'
-import GroupItemStructure from '@/components/data-structure/GroupItem.js'
 
 export default {
   name: 'home',
   components: {
-    GroupItem,
-    GroupItemStructure
+    GroupItem
   },
 
   data () {

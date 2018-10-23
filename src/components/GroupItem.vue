@@ -19,13 +19,9 @@
 </template>
 
 <script>
-import GroupItemStructure from '@/components/data-structure/GroupItem.js'
-
 export default {
   name: 'GroupItem',
-  components: {
-    GroupItemStructure
-  },
+
   props: {
     info: Object,
     theme: String
