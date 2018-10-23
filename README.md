@@ -7,6 +7,21 @@ Create your own YouTube playlist on your own host with delightful UI.
 npm install
 ```
 
+### Firebase setup
+New a file named config.js in src/database and wrap your app tokens of Firebase with export default { }.
+> Your config.js should look like:
+```JavaScript
+export default {
+  apiKey: "yourAppKey",
+  authDomain: "your-authDomain",
+  databaseURL: "your-databaseURL",
+  projectId: "your-projectId",
+  storageBucket: "your-storageBucket",
+  messagingSenderId: "yourMessagingSenderId"
+}
+```
+If you want to fast setup an example, you can import the src/database/mock-data.json to your Real-time Database of Firebase.
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
